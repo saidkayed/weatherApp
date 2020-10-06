@@ -15,12 +15,18 @@ class WeatherScreen extends React.Component {
             errorMSG: "",
             skyText: "",
             temperature: "",
+            refreshing: false,
         }
     }
 
     componentDidMount = async () => {
         await this.getLocation();
         await this.fetchWeather();
+    }
+
+    onRefresh = () => {
+        this.setState({refreshing: true})
+        this.fetchWeather();
     }
 
 
@@ -52,7 +58,8 @@ class WeatherScreen extends React.Component {
         await getWeather(this.state.location).then((res) =>{
             this.setState({
                 skyText: res.skyText,
-                temperature: res.temperature
+                temperature: res.temperature,
+                refreshing: false
             })
         })
     }
@@ -63,6 +70,8 @@ class WeatherScreen extends React.Component {
             city = {this.state.location}
             temperature = {this.state.temperature}
             skyText = {this.state.skyText}
+            onRefresh = {this.onRefresh}
+            refreshing = {this.state.refreshing}
             />
         );
     }
